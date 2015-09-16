@@ -1,0 +1,1 @@
+check cond list = (filter cond list) /= []
