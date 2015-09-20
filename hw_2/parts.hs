@@ -1,13 +1,13 @@
 parts []  = False
 parts [x] = False
-parts (x:xs) = upDividerLengthUnknown x xs 1 (x:xs) where 
-   upDividerLengthUnknown current   []   len  list = True                                                                                                --One increasing block!
-   upDividerLengthUnknown current (y:ys) len  list = if (y > current) then upDividerLengthUnknown y ys (len + 1) list else upDivider list len False where
-      upDivider []   maxLen blockFound = blockFound                                                                                       --Look whether we have already found
-      upDivider list maxLen blockFound = upLauncher list 2 maxLen where 
-	      upLauncher (u:us) iterLen maxLen | (iterLen > maxLen)        = False
-                                   		   | (mod maxLen iterLen /= 0) = upLauncher (u:us) (iterLen + 1) maxLen
-										   | otherwise                 = if (upLoop u us iterLen 1) then True else upLauncher (u:us) (iterLen + 1) maxLen where
-                                                                                     upLoop cur   []   neededLen len = (neededLen == len)
-                                                                                     upLoop cur (u:us) neededLen len | (neededLen > len)  = if (cur < u) then upLoop u us neededLen (len + 1) else False
-                                                                                                                     | (neededLen == len) = upLoop cur (u:us) neededLen 1
+parts (x:xs) = maxBlockLenSeeker x xs 1 (x:xs) where 
+   maxBlockLenSeeker current   []   maxBlockLen  list = True                                                                              
+   maxBlockLenSeeker current (y:ys) maxBlockLen  list = if (current < y) then maxBlockLenSeeker y ys (maxBlockLen + 1) list else blockCombinator list maxBlockLen where                                                                                
+      blockCombinator list maxBlockLen = tryBlockLen list 2 maxBlockLen (length $ list) where
+          tryBlockLen (u:us) blockLen maxBlockLen totalLen | (blockLen > maxBlockLen)                                             = False
+                                                           | (mod maxBlockLen blockLen /= 0) || (mod totalLen blockLen /= 0 )    = tryBlockLen (u:us) (blockLen + 1) maxBlockLen totalLen  --try another length of block
+                                                           | otherwise                                                           = if (blockGoesUp u us blockLen 1) then True else tryBlockLen (u:us) (blockLen + 1) maxBlockLen totalLen
+                                                           where
+                                                                blockGoesUp current   []   blockLen passedLen = (passedLen == blockLen)
+                                                                blockGoesUp current (u:us) blockLen passedLen | (passedLen < blockLen)  = if (current < u) then blockGoesUp u us blockLen (passedLen + 1) else False 
+                                                                                                              | (passedLen == blockLen) = blockGoesUp u us blockLen 1                                    
