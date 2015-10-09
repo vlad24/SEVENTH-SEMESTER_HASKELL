@@ -1,0 +1,1 @@
+coins n = [[x,y,z] | x <- [0..(div n 2)], y <- [0..(div n 3)], z <- [0..(div n 3)], 2*x + 3*y + 5*z == n]
