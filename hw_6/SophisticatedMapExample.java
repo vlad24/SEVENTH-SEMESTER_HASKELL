@@ -9,16 +9,16 @@ public class SophisticatedMapExample {
 	
 	public static int getNDigit(int x, int n){
 		//not smart, but interesting to try
-		return getNDigitRec(Integer.toString(x), n, 1);
+		return getNDigitRec(x, n, 1);
 	}
 	
-	public static int getNDigitRec(String x, int n, int k){
-		if (x.isEmpty()){
+	public static int getNDigitRec(int x, int n, int step){
+		if (x == 0){
 			return 0;
-		}else if (k == n){
-			return Character.getNumericValue(x.charAt(0));
+		}else if (step == n){
+			return x % 10;
 		}else{
-			return getNDigitRec(x.substring(1), n, k + 1);
+			return getNDigitRec(x / 10, n, ++step);
 		}
 	}
 	
@@ -30,7 +30,7 @@ public class SophisticatedMapExample {
 	
 	public static void main(String... args){
 		int n = 3;
-		List<Integer> list = new ArrayList<>(Arrays.asList(0, 12, 24, 606, 26, 40, -36));
+		List<Integer> list = new ArrayList<>(Arrays.asList(563, 5243, 76796));
 		List<Integer> nLasts = getDigitsByNumber(list, n);
 		System.out.println(nLasts);
 	}
