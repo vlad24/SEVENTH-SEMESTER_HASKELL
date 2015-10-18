@@ -1,4 +1,4 @@
---New version for calculation of totalResistance, etc.
+--New version for calculation of totalResistance,CORRECT count elements etc.
 
 data Scheme = Element Float | Sequential Scheme Scheme | Parallel Scheme Scheme 
 ------------------------------------------------------
