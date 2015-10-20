@@ -1,0 +1,13 @@
+infixl 6 :+: 
+infixl 7 :*: 
+data Expr = Val Int | Expr :+: Expr | Expr :*: Expr deriving (Show, Eq) 
+
+expand :: Expr -> Expr 
+expand (     (a :+: b) :*: c         ) = expand (a :*: c) :+: expand (b :*: c)
+expand (     c :*: (a :+: b)         ) = expand (c :*: a) :+: expand (c :*: b)
+expand (   (a :*: b) :*: (c :*: d)   ) = expand ( a :*: b :*: c :*: d )
+expand (   (a :+: b) :+: (c :+: d)   ) = expand ( a :+: b :+: c :+: d )
+expand (    a :+: b                  ) = expand a :+: expand b
+expand (    a :*: b                  ) = expand a :*: expand b
+expand e = e
+
